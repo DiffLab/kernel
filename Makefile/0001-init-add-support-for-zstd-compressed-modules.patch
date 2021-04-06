@@ -1,6 +1,6 @@
-From 3ca3a0238c33df3eb534e4078bf60c18fc8c6667 Mon Sep 17 00:00:00 2001
+From 9ada0f0124537e29146b65c6d9a5a4ae2af0d865 Mon Sep 17 00:00:00 2001
 From: Piotr Gorski <lucjan.lucjanov@gmail.com>
-Date: Wed, 13 Jan 2021 14:01:18 -0800
+Date: Tue, 30 Mar 2021 12:08:53 +0100
 Subject: [PATCH] init: add support for zstd compressed modules
 
 kmod 28 supports modules compressed in zstd format so let's add this possibility to kernel.
@@ -12,10 +12,10 @@ Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
  2 files changed, 11 insertions(+), 5 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 9e73f82e0..6867ecf66 100644
+index e3fc315a5de2..4c7c82ee3b33 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -1049,8 +1049,8 @@ endif # INSTALL_MOD_STRIP
+@@ -1155,8 +1155,8 @@ endif # INSTALL_MOD_STRIP
  export mod_strip_cmd
  
  # CONFIG_MODULE_COMPRESS, if defined, will cause module to be compressed
@@ -26,21 +26,21 @@ index 9e73f82e0..6867ecf66 100644
  
  mod_compress_cmd = true
  ifdef CONFIG_MODULE_COMPRESS
-@@ -1060,6 +1060,9 @@ ifdef CONFIG_MODULE_COMPRESS
+@@ -1166,6 +1166,9 @@ ifdef CONFIG_MODULE_COMPRESS
    ifdef CONFIG_MODULE_COMPRESS_XZ
-     mod_compress_cmd = $(XZ) -f
+     mod_compress_cmd = $(XZ) --lzma2=dict=2MiB -f
    endif # CONFIG_MODULE_COMPRESS_XZ
 +  ifdef CONFIG_MODULE_COMPRESS_ZSTD
-+    mod_compress_cmd = $(ZSTD) -T0 -9 --rm -f
++    mod_compress_cmd = $(ZSTD) -T0 --rm -f -q
 +  endif # CONFIG_MODULE_COMPRESS_ZSTD
  endif # CONFIG_MODULE_COMPRESS
  export mod_compress_cmd
  
 diff --git a/init/Kconfig b/init/Kconfig
-index b77c60f8b..11d7dfea9 100644
+index 3b117436d70b..bc4e5204ac2a 100644
 --- a/init/Kconfig
 +++ b/init/Kconfig
-@@ -2216,8 +2216,8 @@ config MODULE_COMPRESS
+@@ -2252,8 +2252,8 @@ config MODULE_COMPRESS
  	bool "Compress modules on installation"
  	help
  
@@ -51,7 +51,7 @@ index b77c60f8b..11d7dfea9 100644
  
  	  module-init-tools MAY support gzip, and kmod MAY support gzip and xz.
  
-@@ -2239,7 +2239,7 @@ choice
+@@ -2275,7 +2275,7 @@ choice
  	  This determines which sort of compression will be used during
  	  'make modules_install'.
  
@@ -60,7 +60,7 @@ index b77c60f8b..11d7dfea9 100644
  
  config MODULE_COMPRESS_GZIP
  	bool "GZIP"
-@@ -2247,6 +2247,9 @@ config MODULE_COMPRESS_GZIP
+@@ -2283,6 +2283,9 @@ config MODULE_COMPRESS_GZIP
  config MODULE_COMPRESS_XZ
  	bool "XZ"
  
@@ -71,5 +71,5 @@ index b77c60f8b..11d7dfea9 100644
  
  config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
 -- 
-2.30.0.81.g72c4083ddf
+2.31.0.97.g1424303384
 
