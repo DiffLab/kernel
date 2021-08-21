@@ -1,7 +1,7 @@
-From aa2c4dff257a2f90f65ba3524d9e410a4d7104b6 Mon Sep 17 00:00:00 2001
+From 7bd1acf9006b89948cb1a48183d3a32dce978dae Mon Sep 17 00:00:00 2001
 From: Piotr Gorski <lucjan.lucjanov@gmail.com>
 Date: Tue, 27 Jul 2021 19:56:35 +0200
-Subject: [PATCH 7/7] kbuild: add menu for ZSTD module compression options
+Subject: [PATCH 5/5] kbuild: add menu for ZSTD module compression options
 
 Signed-off-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
 ---
@@ -59,5 +59,5 @@ index ac1f60f2c..92f28905a 100644
  config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
  	bool "Allow loading of modules with missing namespace imports"
 -- 
-2.32.0.349.gdaab8a564f
+2.33.0.rc0.52.ge5a14ddd2d
 
